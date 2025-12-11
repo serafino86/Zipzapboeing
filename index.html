@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ZIP ZAPP BOING - ASINO EDITION | Pont d'Art</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+```
+    body {
+        font-family: 'Courier New', monospace;
+        background: #000;
+        overflow: hidden;
+        touch-action: manipulation;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        -webkit-text-size-adjust: 100%;
+        -moz-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    /* SFONDO ANIMATO NEON GRID */
+    #bg-grid {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            linear-gradient(0deg, transparent 24%, rgba(255, 0, 255, 0.1) 25%, rgba(255, 0, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(255, 0, 255, 0.1) 75%, rgba(255, 0, 255, 0.1) 76%, transparent 77%, transparent),
+            linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.1) 25%, rgba(0, 255, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.1) 75%, rgba(0, 255, 255, 0.1) 76%, transparent 77%, transparent);
+        background-size: 50px 50px;
+        animation: gridScroll 20s linear infinite;
+    }
+
+    @keyframes gridScroll {
+        0% { background-position: 0 0; }
+        100% { background-position: 50px 50px; }
+    }
+
+    #stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+    }
+
+    #scanline {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0px, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 2px);
+        pointer-events: none;
+        z-index: 9998;
+    }
+
+    #game-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        z-index: 100;
+        overflow: hidden;
+    }
+
+    /* HEADER */
+    #header {
+        flex: 0 0 auto;
+        padding: 12px 15px;
+        background: rgba(0, 0, 0, 0.9);
+        border-bottom: 2px solid #0ff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #score-display {
+        color: #0ff;
+        font-size: 15px;
+        font-weight: bold;
+        text-shadow: 0 0 10px #0ff;
+    }
+
+    #asino-letters {
+        display: flex;
+        gap: 4px;
+    }
+
+    .asino-letter {
+        width: 24px;
+        height: 28px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 2px solid #666;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .asino-letter.active {
+        background: #f00;
+        color: #fff;
+        border-color: #f00;
+        box-shadow: 0 0 20px #f00;
+        animation: letterBoom 0.4s;
+    }
+
+    @keyframes letterBoom {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+    }
+
+    /* STAGE */
+    #stage {
+        flex: 0 0 auto;
+        height: 20vh;
+        min-height: 120px;
+        max-height: 180px;
+        background: linear-gradient(to top, #0a0020 0%, #1a0040 100%);
+        border-bottom: 3px solid #f0f;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        padding: 10px;
+        box-shadow: inset 0 -20px 40px rgba(255, 0, 255, 0.3);
+    }
+
+    #stage::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: repeating-linear-gradient(90deg, #f0f 0px, #f0f 5px, #0ff 5px, #0ff 10px, #ff0 10px, #ff0 15px, #0f0 15px, #0f0 20px);
+        opacity: 0.7;
+    }
+
+    #actor {
+        width: 60px;
+        height: 60px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .actor-sprite {
+        width: 60px;
+        height: 60px;
+        background: radial-gradient(circle at 30% 30%, #0ff 0%, #0af 50%, #08f 100%);
+        border: 3px solid #0ff;
+        border-radius: 50%;
+        position: relative;
+        animation: actorPulse 2s infinite;
+        box-shadow: 0 0 20px #0ff;
+    }
+
+    @keyframes actorPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .actor-sprite::before {
+        content: '🎭';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 32px;
+    }
+
+    #actor-command {
+        position: absolute;
+        bottom: 70px;
+        left: 0;
+        background: rgba(0, 0, 0, 0.9);
+        color: #ff0;
+        padding: 6px 12px;
+        border: 2px solid #ff0;
+        font-size: 15px;
+        font-weight: bold;
+        display: none;
+        white-space: nowrap;
+        box-shadow: 0 0 15px #ff0;
+        text-shadow: 0 0 10px #ff0;
+    }
+
+    /* CASCADE */
+    #command-cascade {
+        flex: 1 1 auto;
+        background: radial-gradient(ellipse at center, rgba(10, 0, 50, 0.8) 0%, #000 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    #hit-zone {
+        position: absolute;
+        bottom: 12vh;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 140px;
+        height: 70px;
+        border: 3px solid #0f0;
+        border-radius: 10px;
+        box-shadow: 0 0 20px #0f0, inset 0 0 20px rgba(0, 255, 0, 0.2);
+        animation: hitZonePulse 1.5s infinite;
+    }
+
+    @keyframes hitZonePulse {
+        0%, 100% { box-shadow: 0 0 20px #0f0, inset 0 0 20px rgba(0, 255, 0, 0.2); }
+        50% { box-shadow: 0 0 30px #0f0, inset 0 0 30px rgba(0, 255, 0, 0.4); }
+    }
+
+    .falling-command {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        padding: 10px 18px;
+        border: 3px solid;
+        border-radius: 8px;
+        font-size: 19px;
+        font-weight: bold;
+        box-shadow: 0 0 25px;
+        text-shadow: 0 0 10px;
+    }
+
+    .falling-command.normal {
+        color: #0ff;
+        border-color: #0ff;
+        box-shadow: 0 0 25px #0ff;
+        text-shadow: 0 0 10px #0ff;
+    }
+
+    .falling-command.special {
+        color: #ff0;
+        border-color: #ff0;
+        box-shadow: 0 0 30px #ff0;
+        text-shadow: 0 0 15px #ff0;
+        animation: specialWarn 0.8s infinite;
+    }
+
+    @keyframes specialWarn {
+        0%, 100% { transform: translateX(-50%) scale(1); }
+        50% { transform: translateX(-50%) scale(1.08); }
+    }
+
+    .falling-command.correct {
+        background: #0f0;
+        color: #000;
+        border-color: #0f0;
+        animation: correctBurst 0.4s forwards;
+    }
+
+    @keyframes correctBurst {
+        0% { transform: translateX(-50%) scale(1); opacity: 1; }
+        100% { transform: translateX(-50%) scale(2); opacity: 0; }
+    }
+
+    .falling-command.wrong {
+        background: #f00;
+        color: #fff;
+        border-color: #f00;
+        animation: wrongShake 0.4s;
+    }
+
+    @keyframes wrongShake {
+        0%, 100% { transform: translateX(-50%); }
+        25% { transform: translateX(-50%) rotate(-8deg); }
+        75% { transform: translateX(-50%) rotate(8deg); }
+    }
+
+    /* CONTROLS - SOLO 3 PULSANTI */
+    #controls {
+        flex: 0 0 auto;
+        padding: 12px 10px;
+        background: rgba(0, 0, 0, 0.95);
+        border-top: 2px solid #0ff;
+    }
+
+    #main-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .game-button {
+        flex: 1;
+        max-width: 110px;
+        padding: 16px 8px;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+        border: 3px solid;
+        background: rgba(0, 0, 0, 0.8);
+        cursor: pointer;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #btn-zip {
+        color: #f0f;
+        border-color: #f0f;
+        box-shadow: 0 0 15px #f0f;
+        text-shadow: 0 0 10px #f0f;
+    }
+
+    #btn-zip:active {
+        background: #f0f;
+        color: #000;
+    }
+
+    #btn-zapp {
+        color: #0ff;
+        border-color: #0ff;
+        box-shadow: 0 0 15px #0ff;
+        text-shadow: 0 0 10px #0ff;
+    }
+
+    #btn-zapp:active {
+        background: #0ff;
+        color: #000;
+    }
+
+    #btn-boing {
+        color: #0f0;
+        border-color: #0f0;
+        box-shadow: 0 0 15px #0f0;
+        text-shadow: 0 0 10px #0f0;
+    }
+
+    #btn-boing:active {
+        background: #0f0;
+        color: #000;
+    }
+
+    /* OVERLAY */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.97);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        z-index: 10000;
+        padding: 8vh 4vw 8vh 4vw;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        border-top: 3px solid #0ff;
+        box-shadow: inset 0 3px 20px rgba(0, 255, 255, 0.5);
+    }
+
+    .overlay-content {
+        width: 100%;
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: min-content;
+    }
+
+    @keyframes borderFlow {
+        0% { background-position: 0% 0%; }
+        100% { background-position: 200% 0%; }
+    }
+
+    .overlay h1 {
+        color: #ff0;
+        font-size: clamp(28px, 9vw, 52px);
+        margin: 2vh 0;
+        text-align: center;
+        font-weight: bold;
+        letter-spacing: 4px;
+        text-shadow: 0 0 10px #ff0, 0 0 20px #ff0, 0 0 40px #ff0;
+    }
+
+    .overlay h2 {
+        color: #f0f;
+        font-size: clamp(18px, 5.5vw, 28px);
+        margin: 1.5vh 0;
+        text-align: center;
+        text-shadow: 0 0 15px #f0f;
+    }
+
+    .overlay p {
+        color: #0ff;
+        font-size: clamp(14px, 4vw, 17px);
+        margin: 1vh 0;
+        text-align: center;
+        text-shadow: 0 0 8px #0ff;
+    }
+
+    .overlay-button {
+        padding: 13px 30px;
+        font-size: clamp(14px, 4vw, 17px);
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+        border: 3px solid;
+        background: rgba(0, 0, 0, 0.8);
+        cursor: pointer;
+        margin: 1vh 0;
+        text-transform: uppercase;
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .game-logo {
+        font-size: clamp(38px, 11vw, 62px);
+        color: #ff0;
+        font-weight: bold;
+        letter-spacing: 6px;
+        text-align: center;
+        margin: 2vh 0;
+        text-shadow: 3px 3px 0 #f0f, 6px 6px 0 #0ff, 0 0 30px #ff0;
+        cursor: pointer;
+    }
+
+    .subtitle-neon {
+        font-size: clamp(16px, 4.5vw, 24px);
+        color: #f0f;
+        letter-spacing: 3px;
+        text-shadow: 0 0 20px #f0f;
+        margin-bottom: 2vh;
+    }
+
+    .info-card {
+        background: rgba(0, 0, 0, 0.85);
+        border: 3px solid #0ff;
+        padding: 2vh 4vw;
+        margin: 2vh 0;
+        width: 90%;
+        max-width: 350px;
+        box-shadow: 0 0 25px #0ff;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .info-card:active {
+        transform: scale(0.98);
+    }
+
+    .info-card p {
+        font-size: clamp(13px, 3.5vw, 15px);
+        line-height: 1.6;
+        margin: 0.5vh 0;
+    }
+
+    .highlight-text {
+        color: #ff0;
+        font-weight: bold;
+        font-size: clamp(18px, 5vw, 24px);
+        text-shadow: 0 0 12px #ff0;
+    }
+
+    .donkey-icon {
+        font-size: clamp(50px, 13vw, 70px);
+        margin: 2vh 0;
+        cursor: pointer;
+        animation: donkeyBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes donkeyBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    .start-btn-mega {
+        padding: 14px 40px;
+        font-size: clamp(20px, 6vw, 30px);
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+        border: 3px solid #0f0;
+        background: rgba(0, 50, 0, 0.8);
+        color: #0f0;
+        cursor: pointer;
+        margin: 2vh 0;
+        text-transform: uppercase;
+        box-shadow: 0 0 25px #0f0;
+        text-shadow: 0 0 15px #0f0;
+        letter-spacing: 5px;
+        animation: startPulse 1.2s infinite;
+        width: 90%;
+        max-width: 280px;
+    }
+
+    @keyframes startPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .start-btn-mega:active {
+        background: #0f0;
+        color: #000;
+    }
+
+    .link-row {
+        display: flex;
+        gap: 10px;
+        margin: 1.5vh 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .link-btn {
+        color: inherit;
+        text-decoration: none;
+        font-size: clamp(12px, 3.2vw, 14px);
+        text-shadow: 0 0 8px;
+        padding: 8px 14px;
+        border: 2px solid;
+        border-radius: 5px;
+        flex: 1;
+        min-width: 110px;
+        max-width: 150px;
+        text-align: center;
+    }
+
+    .footer-url {
+        color: #0ff;
+        font-size: clamp(11px, 3vw, 13px);
+        text-decoration: none;
+        text-shadow: 0 0 8px #0ff;
+        margin: 2vh 0;
+    }
+
+    .links-section {
+        width: 100%;
+        max-width: 380px;
+        margin-top: 2vh;
+    }
+
+    .links-section p {
+        color: #0ff;
+        font-size: clamp(13px, 3.8vw, 16px);
+        margin-bottom: 1.5vh;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div id="bg-grid"></div>
+    <div id="stars"></div>
+    <div id="scanline"></div>
+
+```
+<div id="game-container">
+    <div id="header">
+        <div id="score-display">
+            <div>⭐ <span id="score">0</span></div>
+            <div style="font-size: 11px;">🏆 <span id="highscore">0</span></div>
+        </div>
+        <div id="asino-letters">
+            <div class="asino-letter">A</div>
+            <div class="asino-letter">S</div>
+            <div class="asino-letter">I</div>
+            <div class="asino-letter">N</div>
+            <div class="asino-letter">O</div>
+        </div>
+    </div>
+
+    <div id="stage">
+        <div id="actor">
+            <div id="actor-command"></div>
+            <div class="actor-sprite"></div>
+        </div>
+    </div>
+
+    <div id="command-cascade">
+        <div id="hit-zone"></div>
+    </div>
+
+    <div id="controls">
+        <div id="main-buttons">
+            <button class="game-button" id="btn-zip">ZIP</button>
+            <button class="game-button" id="btn-zapp">ZAPP</button>
+            <button class="game-button" id="btn-boing">BOING</button>
+        </div>
+    </div>
+
+    <!-- IDLE -->
+    <div id="idle-overlay" class="overlay">
+        <div class="overlay-content">
+            <div style="font-size: clamp(45px, 11vw, 60px); margin-bottom: 1vh;" onclick="window.open('https://www.associazionepontdart.com/', '_blank')">🎭</div>
+            <div class="game-logo" onclick="window.open('https://www.associazionepontdart.com/', '_blank')">ZIP ZAPP<br>BOING</div>
+            <div class="subtitle-neon">⚡ ASINO EDITION ⚡</div>
+
+            <div class="info-card" onclick="window.open('https://www.associazionepontdart.com/', '_blank')">
+                <p>UN GIOCO DI</p>
+                <p class="highlight-text">PONT D'ART</p>
+                <p style="color: #0ff;">📍 STUDIO GINEVRA</p>
+                <p style="color: #888; font-size: 11px; margin-top: 1vh;">👆 TAP PER VISITARE</p>
+            </div>
+
+            <div class="donkey-icon" onclick="easterEggTap()">🐴</div>
+
+            <button class="start-btn-mega" onclick="startGame()">START</button>
+
+            <div class="link-row">
+                <a href="https://www.associazionepontdart.com/corsi" target="_blank" class="link-btn" style="color: #ff0; border-color: #ff0; text-shadow: 0 0 8px #ff0;">📚 CORSI</a>
+                <a href="https://www.facebook.com/PontDArtGeneve" target="_blank" class="link-btn" style="color: #f0f; border-color: #f0f; text-shadow: 0 0 8px #f0f;">📘 FACEBOOK</a>
+            </div>
+
+            <a href="https://www.associazionepontdart.com/" target="_blank" class="footer-url">🌐 WWW.ASSOCIAZIONEPONTDART.COM</a>
+        </div>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="gameover-overlay" class="overlay" style="display: none;">
+        <div class="overlay-content">
+            <h1>GAME OVER</h1>
+            <h2>🐴 HAI FATTO ASINO!</h2>
+            <p style="font-size: clamp(22px, 6.5vw, 36px); color: #ff0; font-weight: bold;">
+                <span id="final-score">0</span> PUNTI
+            </p>
+            <p id="highscore-message" style="color: #f0f; font-size: clamp(15px, 4.5vw, 22px);"></p>
+
+            <div class="link-row" style="margin-top: 2vh;">
+                <button class="overlay-button" onclick="shareOnFacebook()" style="color: #f0f; border-color: #f0f; box-shadow: 0 0 15px #f0f; text-shadow: 0 0 8px #f0f; max-width: 155px;">
+                    📘 FACEBOOK
+                </button>
+                <button class="overlay-button" onclick="shareOnWhatsApp()" style="color: #0f0; border-color: #0f0; box-shadow: 0 0 15px #0f0; text-shadow: 0 0 8px #0f0; max-width: 155px;">
+                    💬 WHATSAPP
+                </button>
+            </div>
+
+            <button class="overlay-button" onclick="restartGame()" style="font-size: clamp(16px, 4.5vw, 20px); padding: 15px 40px; color: #0ff; border-color: #0ff; box-shadow: 0 0 15px #0ff; text-shadow: 0 0 8px #0ff;">
+                🔄 RIPROVA
+            </button>
+
+            <div class="links-section">
+                <p>SCOPRI DI PIÙ SU PONT D'ART</p>
+                
+                <button class="overlay-button" onclick="window.open('https://www.associazionepontdart.com/corsi', '_blank')" style="color: #ff0; border-color: #ff0; box-shadow: 0 0 15px #ff0; text-shadow: 0 0 8px #ff0;">
+                    📚 I NOSTRI CORSI
+                </button>
+
+                <button class="overlay-button" onclick="window.open('https://www.associazionepontdart.com/', '_blank')" style="color: #0ff; border-color: #0ff; box-shadow: 0 0 15px #0ff; text-shadow: 0 0 8px #0ff;">
+                    🌐 VISITA IL SITO
+                </button>
+
+                <button class="overlay-button" onclick="window.open('https://www.facebook.com/PontDArtGeneve', '_blank')" style="color: #f0f; border-color: #f0f; box-shadow: 0 0 15px #f0f; text-shadow: 0 0 8px #f0f;">
+                    📘 PAGINA FACEBOOK
+                </button>
+
+                <button class="overlay-button" onclick="window.open('https://wa.me/41779425667', '_blank')" style="color: #0f0; border-color: #0f0; box-shadow: 0 0 15px #0f0; text-shadow: 0 0 8px #0f0;">
+                    📞 CONTATTACI
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EASTER EGG -->
+    <div id="easteregg-overlay" class="overlay" style="display: none;">
+        <div class="overlay-content">
+            <div style="font-size: clamp(65px, 16vw, 110px); margin-bottom: 2vh; animation: eggSpin 2s;">🥚</div>
+            <h1>🎉 EASTER EGG! 🎉</h1>
+            <h2>HAI VINTO!</h2>
+            <p style="font-size: clamp(17px, 5vw, 24px); color: #ff0; font-weight: bold; line-height: 1.6;">
+                🎭 LEZIONE GRATUITA<br>DI TEATRO 🎭
+            </p>
+
+            <div class="info-card" style="border-color: #0f0; box-shadow: 0 0 35px #0f0; margin-top: 2vh;">
+                <p style="color: #ff0; font-size: clamp(13px, 4vw, 17px);">📞 CONTATTA SIMONE</p>
+                <a href="https://wa.me/41779425700" style="color: #0f0; font-size: clamp(19px, 6vw, 26px); font-weight: bold; text-decoration: none; text-shadow: 0 0 12px #0f0; display: block; margin: 1.5vh 0;">
+                    💬 +41 77 942 57 00
+                </a>
+                <p style="color: #0ff; font-size: 13px;">WHATSAPP</p>
+            </div>
+
+            <button class="overlay-button" onclick="closeEasterEgg()" style="margin-top: 2vh; padding: 14px 40px; color: #0ff; border-color: #0ff; box-shadow: 0 0 15px #0ff; text-shadow: 0 0 8px #0ff;">
+                ✨ FANTASTICO!
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes eggSpin {
+        0% { transform: rotate(0deg) scale(0); }
+        50% { transform: rotate(360deg) scale(1.2); }
+        100% { transform: rotate(720deg) scale(1); }
+    }
+</style>
+
+<script>
+    // AUDIO ENGINE
+    const AudioEngine = {
+        ctx: null,
+        
+        init() {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        },
+        
+        beep(freq, duration, type = 'square') {
+            if (!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            
+            osc.frequency.value = freq;
+            osc.type = type;
+            
+            gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+            
+            osc.start(this.ctx.currentTime);
+            osc.stop(this.ctx.currentTime + duration);
+        },
+        
+        commandSpawn() {
+            this.beep(800, 0.08, 'square');
+            setTimeout(() => this.beep(1000, 0.08, 'square'), 50);
+        },
+        
+        specialSpawn() {
+            this.beep(600, 0.12, 'triangle');
+        },
+        
+        correct() {
+            this.beep(1200, 0.1, 'sine');
+            setTimeout(() => this.beep(1400, 0.1, 'sine'), 60);
+            setTimeout(() => this.beep(1600, 0.15, 'sine'), 120);
+        },
+        
+        wrong() {
+            this.beep(200, 0.15, 'sawtooth');
+            setTimeout(() => this.beep(150, 0.15, 'sawtooth'), 100);
+            setTimeout(() => this.beep(100, 0.2, 'sawtooth'), 200);
+        },
+        
+        gameOver() {
+            const notes = [800, 700, 600, 500, 400, 300, 200];
+            notes.forEach((freq, i) => {
+                setTimeout(() => this.beep(freq, 0.15, 'triangle'), i * 100);
+            });
+        },
+        
+        easterEgg() {
+            const melody = [523, 587, 659, 698, 784, 880, 988, 1047];
+            melody.forEach((freq, i) => {
+                setTimeout(() => this.beep(freq, 0.12, 'sine'), i * 80);
+            });
+        }
+    };
+
+    document.addEventListener('click', () => {
+        if (!AudioEngine.ctx) AudioEngine.init();
+    }, { once: true });
+
+    // STELLE
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        starsContainer.appendChild(star);
+    }
+
+    // CONFIG
+    const CONFIG = {
+        initialSpeed: 1600,      // Era 2200 → Ora molto più veloce!
+        minSpeed: 500,           // Era 700 → Limite ancora più veloce!
+        speedDecrease: 80,       // Era 60 → Aumenta velocità più rapidamente!
+        specialChance: 0.25,     // Era 0.20 → Più parole speciali = più sfida!
+        easterEggTaps: 10
+    };
+
+    // EASTER EGG
+    let donkeyTaps = 0;
+    function easterEggTap() {
+        donkeyTaps++;
+        console.log('🐴 Tap:', donkeyTaps, '/ 10');
+        
+        AudioEngine.beep(800 + donkeyTaps * 100, 0.08, 'square');
+        
+        const donkey = document.querySelector('.donkey-icon');
+        if (donkey) {
+            donkey.style.transform = 'scale(1.3) rotate(15deg)';
+            setTimeout(() => donkey.style.transform = '', 100);
+        }
+        
+        if (donkeyTaps >= CONFIG.easterEggTaps) {
+            donkeyTaps = 0;
+            AudioEngine.easterEgg();
+            document.getElementById('easteregg-overlay').style.display = 'flex';
+        }
+    }
+
+    function closeEasterEgg() {
+        document.getElementById('easteregg-overlay').style.display = 'none';
+    }
+
+    // GAME STATE
+    let gameState = {
+        state: 'IDLE',
+        score: 0,
+        errors: 0,
+        highscore: localStorage.getItem('zzb_hs') || 0,
+        currentSpeed: CONFIG.initialSpeed,
+        gameLoop: null,
+        fallingCommands: []
+    };
+
+    // COMANDI - SOLO NORMALI E SPECIALI DA IGNORARE
+    const COMMANDS = {
+        normal: ['ZIP', 'ZAPP', 'BOING'],
+        special: ['BOMBA', 'SALTA', 'CIAK', 'APPLAUSO', 'TENDA', 'LUCI', 'SIPARIO', 'PALCO', 'SCENA', 'ATTORE']
+    };
+
+    const elements = {
+        actor: document.getElementById('actor'),
+        actorCommand: document.getElementById('actor-command'),
+        cascade: document.getElementById('command-cascade'),
+        scoreDisplay: document.getElementById('score'),
+        highscoreDisplay: document.getElementById('highscore'),
+        asinoLetters: document.querySelectorAll('.asino-letter'),
+        btnZip: document.getElementById('btn-zip'),
+        btnZapp: document.getElementById('btn-zapp'),
+        btnBoing: document.getElementById('btn-boing'),
+        idleOverlay: document.getElementById('idle-overlay'),
+        gameoverOverlay: document.getElementById('gameover-overlay'),
+        finalScore: document.getElementById('final-score'),
+        highscoreMessage: document.getElementById('highscore-message')
+    };
+
+    elements.highscoreDisplay.textContent = gameState.highscore;
+
+    // PULSANTI ULTRA REATTIVI
+    function setupButton(btn, handler) {
+        btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handler();
+        }, { passive: false });
+        
+        btn.addEventListener('click', (e) => {
+            if (e.detail !== 0) handler();
+        });
+    }
+
+    setupButton(elements.btnZip, () => handleButtonPress('ZIP'));
+    setupButton(elements.btnZapp, () => handleButtonPress('ZAPP'));
+    setupButton(elements.btnBoing, () => handleButtonPress('BOING'));
+
+    // START GAME
+    function startGame() {
+        gameState.state = 'PLAYING';
+        gameState.score = 0;
+        gameState.errors = 0;
+        gameState.currentSpeed = CONFIG.initialSpeed;
+        gameState.fallingCommands = [];
+
+        elements.idleOverlay.style.display = 'none';
+        elements.scoreDisplay.textContent = '0';
+        elements.asinoLetters.forEach(letter => letter.classList.remove('active'));
+        elements.cascade.innerHTML = '<div id="hit-zone"></div>';
+
+        AudioEngine.beep(1200, 0.15, 'sine');
+        gameLoop();
+    }
+
+    function gameLoop() {
+        if (gameState.state !== 'PLAYING') return;
+        generateCommand();
+        gameState.gameLoop = setTimeout(gameLoop, gameState.currentSpeed);
+    }
+
+    function generateCommand() {
+        const isSpecial = Math.random() < CONFIG.specialChance;
+        let command;
+
+        if (isSpecial) {
+            command = COMMANDS.special[Math.floor(Math.random() * COMMANDS.special.length)];
+            AudioEngine.specialSpawn();
+        } else {
+            command = COMMANDS.normal[Math.floor(Math.random() * COMMANDS.normal.length)];
+            AudioEngine.commandSpawn();
+        }
+
+        showActorCommand(command);
+        createFallingCommand(command, isSpecial);
+    }
+
+    function showActorCommand(command) {
+        elements.actorCommand.textContent = command;
+        elements.actorCommand.style.display = 'block';
+        setTimeout(() => elements.actorCommand.style.display = 'none', 500);
+    }
+
+    function createFallingCommand(command, isSpecial) {
+        const cmdElement = document.createElement('div');
+        cmdElement.className = 'falling-command ' + (isSpecial ? 'special' : 'normal');
+        cmdElement.textContent = command;
+        cmdElement.style.top = '-70px';
+
+        const commandData = {
+            element: cmdElement,
+            command: command,
+            isSpecial: isSpecial,
+            startTime: Date.now(),
+            answered: false
+        };
+
+        gameState.fallingCommands.push(commandData);
+        elements.cascade.appendChild(cmdElement);
+
+        animateFallingCommand(commandData);
+    }
+
+    function animateFallingCommand(commandData) {
+        const animate = () => {
+            if (gameState.state !== 'PLAYING' || commandData.answered) return;
+
+            const elapsed = Date.now() - commandData.startTime;
+            const progress = elapsed / gameState.currentSpeed;
+            const cascadeHeight = elements.cascade.offsetHeight;
+            const newTop = progress * cascadeHeight;
+
+            commandData.element.style.top = newTop + 'px';
+
+            const hitZoneEnd = cascadeHeight - 50;
+
+            if (newTop >= hitZoneEnd && !commandData.answered) {
+                handleMissedCommand(commandData);
+            } else if (newTop < hitZoneEnd) {
+                requestAnimationFrame(animate);
+            }
+        };
+
+        requestAnimationFrame(animate);
+    }
+
+    function handleMissedCommand(commandData) {
+        commandData.answered = true;
+
+        // Se è speciale e passa senza essere toccato = OK!
+        if (commandData.isSpecial) {
+            commandData.element.style.opacity = '0';
+            setTimeout(() => {
+                if (commandData.element.parentNode) commandData.element.remove();
+                gameState.fallingCommands = gameState.fallingCommands.filter(c => c !== commandData);
+            }, 200);
+        } else {
+            // Se è normale (ZIP/ZAPP/BOING) e passa = ERRORE
+            commandData.element.classList.add('wrong');
+            AudioEngine.wrong();
+            addError();
+
+            setTimeout(() => {
+                if (commandData.element.parentNode) commandData.element.remove();
+                gameState.fallingCommands = gameState.fallingCommands.filter(c => c !== commandData);
+            }, 400);
+        }
+    }
+
+    function handleButtonPress(buttonCommand) {
+        if (gameState.state !== 'PLAYING') return;
+
+        const cascadeHeight = elements.cascade.offsetHeight;
+        const hitZoneStart = cascadeHeight - 160;
+        const hitZoneEnd = cascadeHeight - 50;
+
+        let foundCommand = null;
+        let commandInZone = false;
+
+        // Cerca comando NORMALE nella hit zone
+        for (let commandData of gameState.fallingCommands) {
+            if (commandData.answered) continue;
+
+            const top = parseFloat(commandData.element.style.top);
+            
+            // Controlla se è nella hit zone
+            if (top >= hitZoneStart && top <= hitZoneEnd) {
+                commandInZone = true;
+                
+                // SE È SPECIALE E PREMI = ERRORE!
+                if (commandData.isSpecial) {
+                    handleWrongAnswer(commandData);
+                    return;
+                }
+                
+                // Se è normale e corrisponde
+                if (commandData.command === buttonCommand) {
+                    foundCommand = commandData;
+                    break;
+                }
+            }
+        }
+
+        if (foundCommand) {
+            // PUNTO VALIDO - era nella zona verde!
+            handleCorrectAnswer(foundCommand, true);
+        } else if (commandInZone) {
+            // C'era qualcosa nella zona ma hai premuto il pulsante sbagliato
+            for (let commandData of gameState.fallingCommands) {
+                if (commandData.answered) continue;
+                const top = parseFloat(commandData.element.style.top);
+                if (top >= hitZoneStart && top <= hitZoneEnd) {
+                    handleWrongAnswer(commandData);
+                    return;
+                }
+            }
+        } else {
+            // FUORI DALLA ZONA VERDE!
+            // Cerca se c'è il comando giusto ma fuori zona
+            for (let commandData of gameState.fallingCommands) {
+                if (commandData.answered || commandData.isSpecial) continue;
+                if (commandData.command === buttonCommand) {
+                    // TROVATO MA FUORI ZONA = NESSUN PUNTO!
+                    handleCorrectAnswer(commandData, false);
+                    return;
+                }
+            }
+        }
+    }
+
+    function handleCorrectAnswer(commandData, inZone) {
+        commandData.answered = true;
+        
+        if (inZone) {
+            // DENTRO LA ZONA VERDE = PUNTO + SUONO + ANIMAZIONE VERDE
+            commandData.element.classList.add('correct');
+            AudioEngine.correct();
+            gameState.score++;
+            elements.scoreDisplay.textContent = gameState.score;
+            updateDifficulty();
+            
+            // Flash del riquadro verde!
+            const hitZone = document.getElementById('hit-zone');
+            if (hitZone) {
+                hitZone.style.background = 'rgba(0, 255, 0, 0.3)';
+                hitZone.style.boxShadow = '0 0 40px #0f0, inset 0 0 40px rgba(0, 255, 0, 0.5)';
+                setTimeout(() => {
+                    hitZone.style.background = '';
+                    hitZone.style.boxShadow = '0 0 20px #0f0, inset 0 0 20px rgba(0, 255, 0, 0.2)';
+                }, 200);
+            }
+            
+            console.log('✅ PUNTO! Preso nella zona verde!');
+        } else {
+            // FUORI ZONA = NESSUN PUNTO, MA ANIMAZIONE ARANCIONE
+            commandData.element.style.background = '#ff8800';
+            commandData.element.style.borderColor = '#ff8800';
+            commandData.element.style.color = '#000';
+            commandData.element.style.boxShadow = '0 0 30px #ff8800';
+            
+            AudioEngine.beep(600, 0.1, 'triangle'); // Suono neutro
+            
+            console.log('⚠️ CORRETTO ma FUORI ZONA! Nessun punto.');
+        }
+
+        setTimeout(() => {
+            if (commandData.element.parentNode) commandData.element.remove();
+            gameState.fallingCommands = gameState.fallingCommands.filter(c => c !== commandData);
+        }, 400);
+    }
+
+    function handleWrongAnswer(commandData) {
+        commandData.answered = true;
+        commandData.element.classList.add('wrong');
+        AudioEngine.wrong();
+        addError();
+
+        setTimeout(() => {
+            if (commandData.element.parentNode) commandData.element.remove();
+            gameState.fallingCommands = gameState.fallingCommands.filter(c => c !== commandData);
+        }, 400);
+    }
+
+    function addError() {
+        gameState.errors++;
+        if (gameState.errors <= 5) {
+            elements.asinoLetters[gameState.errors - 1].classList.add('active');
+        }
+        if (gameState.errors >= 5) {
+            endGame();
+        }
+    }
+
+    function updateDifficulty() {
+        // Aumenta difficoltà ogni 5 punti invece di 10!
+        if (gameState.score % 5 === 0 && gameState.score > 0) {
+            if (gameState.currentSpeed > CONFIG.minSpeed) {
+                gameState.currentSpeed = Math.max(CONFIG.minSpeed, gameState.currentSpeed - CONFIG.speedDecrease);
+                console.log('🔥 Speed UP! Ora:', gameState.currentSpeed + 'ms');
+            }
+        }
+    }
+
+    function endGame() {
+        gameState.state = 'GAME_OVER';
+        clearTimeout(gameState.gameLoop);
+        AudioEngine.gameOver();
+
+        if (gameState.score > gameState.highscore) {
+            gameState.highscore = gameState.score;
+            localStorage.setItem('zzb_hs', gameState.highscore);
+            elements.highscoreDisplay.textContent = gameState.highscore;
+            elements.highscoreMessage.textContent = '🏆 NUOVO RECORD!';
+        } else {
+            elements.highscoreMessage.textContent = 'HI-SCORE: ' + gameState.highscore;
+        }
+
+        elements.finalScore.textContent = gameState.score;
+        elements.gameoverOverlay.style.display = 'flex';
+    }
+
+    function restartGame() {
+        elements.gameoverOverlay.style.display = 'none';
+        startGame();
+    }
+
+    function shareOnFacebook() {
+        const text = encodeURIComponent(`Ho fatto ${gameState.score} punti in ZIP ZAPP BOING! 🎭🐴`);
+        const url = encodeURIComponent('https://www.associazionepontdart.com/');
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+    }
+
+    function shareOnWhatsApp() {
+        const text = encodeURIComponent(`🎭 Ho fatto ${gameState.score} punti in ZIP ZAPP BOING!\n\nhttps://www.associazionepontdart.com/`);
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+</script>
+```
+
+</body>
+</html>
