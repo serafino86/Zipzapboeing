@@ -270,6 +270,7 @@
             padding: 16px;
             display: grid;
             gap: 14px;
+            grid-template-rows: auto auto 1fr auto;
         }
 
         .hud {
@@ -823,8 +824,14 @@
                 padding-bottom: 24px;
             }
 
+            .game-panel {
+                min-height: calc(100dvh - 20px);
+                max-height: calc(100dvh - 20px);
+                overflow: hidden;
+            }
+
             .players-stage {
-                inset: 24px 4px 118px;
+                inset: 16px 4px 84px;
             }
 
             .player-slot {
@@ -842,7 +849,17 @@
             .player-slot.player-4 { left: 23%; bottom: 20%; transform: translateX(-50%); }
 
             .stage {
-                min-height: 560px;
+                min-height: 0;
+                height: 100%;
+            }
+
+            .decision-card {
+                position: sticky;
+                bottom: 0;
+                z-index: 10;
+                padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+                background: rgba(18, 10, 28, 0.94);
+                box-shadow: 0 -12px 28px rgba(0,0,0,0.24);
             }
 
             .stage-preview {
@@ -865,6 +882,12 @@
             .overlay-card {
                 padding: 16px;
                 border-radius: 24px;
+            }
+
+            .game-panel {
+                min-height: calc(100dvh - 12px);
+                max-height: calc(100dvh - 12px);
+                gap: 10px;
             }
 
             .overlay {
@@ -915,7 +938,13 @@
             }
 
             .action-row {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 8px;
+            }
+
+            .action-btn {
+                min-height: 58px;
+                font-size: 0.98rem;
             }
 
             .score-grid {
