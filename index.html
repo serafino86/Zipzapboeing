@@ -1166,7 +1166,9 @@
             statusTimer: null,
             tutorialInterval: null,
             tutorialTimeout: null,
-            tutorialDirection: 1
+            tutorialDirection: 1,
+            tutorialStepTimers: [],
+            tutorialEndsAt: 0
         };
 
         function buildTutorialSteps() {
@@ -1506,7 +1508,7 @@
         }
 
         function syncWhatsAppLinks() {
-            const href = `https://wa.me/?text=${encodeURIComponent(buildItalianNightMessage())}`;
+            const href = `https://wa.me/41779425700?text=${encodeURIComponent(buildItalianNightMessage())}`;
             ui.whatsappLinkStart.href = href;
             ui.whatsappLinkEnd.href = href;
         }
@@ -1526,6 +1528,8 @@
         function hideTutorialAndStart() {
             clearInterval(game.tutorialInterval);
             clearTimeout(game.tutorialTimeout);
+            game.tutorialStepTimers.forEach(timer => clearTimeout(timer));
+            game.tutorialStepTimers = [];
             ui.tutorialOverlay.classList.add('hidden');
             clearTutorialVisuals();
             scheduleNpcTurn();
@@ -1534,30 +1538,31 @@
         function showTutorial() {
             clearInterval(game.tutorialInterval);
             clearTimeout(game.tutorialTimeout);
+            game.tutorialStepTimers.forEach(timer => clearTimeout(timer));
+            game.tutorialStepTimers = [];
             ui.tutorialOverlay.classList.remove('hidden');
 
-            let remaining = 10;
             const totalSeconds = 14;
-            remaining = totalSeconds;
-            let stepIndex = 0;
-            renderTutorialStep(stepIndex);
-            ui.tutorialTimer.textContent = `Partenza tra ${remaining}s`;
+            const stepSchedule = [
+                { at: 0, step: 0 },
+                { at: 4, step: 1 },
+                { at: 8, step: 2 },
+                { at: 11, step: 3 }
+            ];
+            renderTutorialStep(0);
+            ui.tutorialTimer.textContent = `Partenza tra ${totalSeconds}s`;
+
+            stepSchedule.slice(1).forEach(item => {
+                const timer = setTimeout(() => renderTutorialStep(item.step), item.at * 1000);
+                game.tutorialStepTimers.push(timer);
+            });
 
             game.tutorialInterval = setInterval(() => {
-                remaining -= 1;
-                if (remaining <= 10 && stepIndex === 0) {
-                    stepIndex = 1;
-                    renderTutorialStep(stepIndex);
-                } else if (remaining <= 6 && stepIndex === 1) {
-                    stepIndex = 2;
-                    renderTutorialStep(stepIndex);
-                } else if (remaining <= 2 && stepIndex === 2) {
-                    stepIndex = 3;
-                    renderTutorialStep(stepIndex);
-                }
+                const remaining = Math.max(0, Math.ceil((game.tutorialEndsAt - Date.now()) / 1000));
                 ui.tutorialTimer.textContent = `Partenza tra ${Math.max(remaining, 0)}s`;
             }, 1000);
 
+            game.tutorialEndsAt = Date.now() + totalSeconds * 1000;
             game.tutorialTimeout = setTimeout(hideTutorialAndStart, totalSeconds * 1000);
         }
 
@@ -1673,6 +1678,7 @@
             game.awaitingHuman = false;
             game.plannedCommand = null;
             game.plannedTarget = null;
+            game.tutorialEndsAt = 0;
             updateHud();
             clearTutorialVisuals();
             ui.tutorialOverlay.classList.add('hidden');
