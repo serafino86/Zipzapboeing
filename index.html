@@ -1530,9 +1530,21 @@
             clearTimeout(game.tutorialTimeout);
             game.tutorialStepTimers.forEach(timer => clearTimeout(timer));
             game.tutorialStepTimers = [];
+            clearTimeout(game.statusTimer);
+            clearTimeout(game.npcTimer);
+            cancelAnimationFrame(game.humanFrame);
+            game.awaitingHuman = false;
+            game.plannedCommand = null;
+            game.plannedTarget = null;
+            game.direction = 1;
+            game.activeIndex = nextIndex(game.playerId, -1);
+            game.previousIndex = nextIndex(game.activeIndex, -1);
+            ui.directionPill.textContent = `Direzione: ➜`;
             ui.tutorialOverlay.classList.add('hidden');
+            ui.decisionCard.classList.add('hidden');
             clearTutorialVisuals();
-            scheduleNpcTurn();
+            updateHud();
+            setTimeout(scheduleNpcTurn, 180);
         }
 
         function showTutorial() {
@@ -1679,6 +1691,7 @@
             game.plannedCommand = null;
             game.plannedTarget = null;
             game.tutorialEndsAt = 0;
+            game.tutorialStepTimers = [];
             updateHud();
             clearTutorialVisuals();
             ui.tutorialOverlay.classList.add('hidden');
