@@ -404,11 +404,12 @@
 
         .player-badge strong {
             display: block;
-            font-size: 0.95rem;
+            font-size: 0.86rem;
+            line-height: 1.05;
         }
 
         .player-badge span {
-            display: block;
+            display: none;
             color: #ffe39e;
             font-size: 0.68rem;
             letter-spacing: 0.06em;
@@ -639,15 +640,6 @@
             transform: translateY(-50%) rotate(45deg);
         }
 
-        .decision-card h2 {
-            font-size: 1.12rem;
-        }
-
-        .decision-card p {
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
         .target-pill {
             display: inline-flex;
             align-items: center;
@@ -854,8 +846,8 @@
             }
 
             .player-slot.player-1 { left: 77%; bottom: 20%; transform: translateX(-50%); }
-            .player-slot.player-2 { left: 63%; top: 7%; transform: translateX(-50%); }
-            .player-slot.player-3 { left: 37%; top: 7%; transform: translateX(-50%); }
+            .player-slot.player-2 { left: 66%; top: 5%; transform: translateX(-50%); }
+            .player-slot.player-3 { left: 34%; top: 5%; transform: translateX(-50%); }
             .player-slot.player-4 { left: 23%; bottom: 20%; transform: translateX(-50%); }
 
             .stage {
@@ -869,24 +861,20 @@
                 right: 16px;
                 bottom: calc(16px + env(safe-area-inset-bottom, 0px));
                 z-index: 12;
-                gap: 8px;
-                padding: 12px 12px 14px;
+                gap: 7px;
+                padding: 10px 12px 12px;
                 background: rgba(18, 10, 28, 0.94);
                 box-shadow: 0 -12px 28px rgba(0,0,0,0.24);
             }
 
-            .decision-card h2 {
-                font-size: 1rem;
-            }
-
+            .decision-card h2,
             .decision-card p {
-                font-size: 0.92rem;
-                line-height: 1.35;
+                display: none;
             }
 
             .target-pill {
-                padding: 8px 10px;
-                font-size: 0.86rem;
+                padding: 7px 10px;
+                font-size: 0.82rem;
             }
 
             .timer-track {
@@ -898,8 +886,8 @@
             }
 
             .action-btn {
-                min-height: 54px;
-                font-size: 0.94rem;
+                min-height: 50px;
+                font-size: 0.9rem;
                 border-radius: 16px;
             }
 
@@ -964,6 +952,14 @@
 
             .player-badge {
                 min-width: 0;
+            }
+
+            .player-badge strong {
+                font-size: 0.78rem;
+            }
+
+            .player-badge span {
+                font-size: 0.62rem;
             }
 
             .speech-bubble {
@@ -1084,8 +1080,6 @@
                 </div>
 
                 <div class="decision-card hidden" id="decision-card">
-                    <h2>Tocca a Te</h2>
-                    <p id="decision-text">Guarda dove punta la scena e scegli al volo.</p>
                     <div class="target-pill" id="target-pill">Target acceso</div>
 
                     <div class="timer">
@@ -1172,7 +1166,6 @@
             tutorialTimer: document.getElementById('tutorial-timer'),
             tutorialSkip: document.getElementById('tutorial-skip'),
             decisionCard: document.getElementById('decision-card'),
-            decisionText: document.getElementById('decision-text'),
             targetPill: document.getElementById('target-pill'),
             timerFill: document.getElementById('timer-fill'),
             timerText: document.getElementById('timer-text'),
@@ -1316,7 +1309,6 @@
                     <img src="${player.image}" alt="${player.name}">
                     <div class="player-badge">
                         <strong>${player.name}</strong>
-                        <span data-role-label>${player.human ? 'Tu' : 'Compagnia'}</span>
                     </div>
                 </div>
             `).join('');
@@ -1334,8 +1326,6 @@
                 const el = document.getElementById(`player-${player.id}`);
                 if (el) {
                     el.classList.remove('active', 'target', 'facing-left');
-                    const role = el.querySelector('[data-role-label]');
-                    if (role) role.textContent = player.human ? 'Tu' : 'Compagnia';
                 }
                 const bubble = document.getElementById(`bubble-${player.id}`);
                 if (bubble) bubble.className = 'speech-bubble';
@@ -1347,15 +1337,11 @@
             const activeEl = document.getElementById(`player-${active}`);
             if (activeEl) {
                 activeEl.classList.add('active');
-                const role = activeEl.querySelector('[data-role-label]');
-                if (role) role.textContent = PLAYERS[active].human ? 'Tu' : 'In scena';
             }
             if (target !== null) {
                 const targetEl = document.getElementById(`player-${target}`);
                 if (targetEl) {
                     targetEl.classList.add('target');
-                    const role = targetEl.querySelector('[data-role-label]');
-                    if (role) role.textContent = 'Prossimo';
                 }
             }
         }
@@ -1423,7 +1409,6 @@
             markPlayers(humanIndex, result.target);
             ui.decisionCard.classList.remove('hidden');
             ui.targetPill.textContent = `Target: ${PLAYERS[result.target].name}`;
-            ui.decisionText.textContent = `Tu dovrai dire ${game.plannedCommand} ${PLAYERS[result.target].name}. Premi solo il comando giusto.`;
             updateTimer();
         }
 
