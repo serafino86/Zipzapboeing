@@ -36,6 +36,11 @@
             background:
                 linear-gradient(180deg, rgba(10, 6, 22, 0.78), rgba(6, 4, 14, 0.94)),
                 url('assets/generated/theater-bg.jpg') center/cover no-repeat fixed;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body.game-active {
             overflow: hidden;
         }
 
@@ -807,6 +812,11 @@
         }
 
         @media (max-width: 760px) {
+            .app-shell {
+                align-items: flex-start;
+                padding-bottom: 24px;
+            }
+
             .players-stage {
                 inset: 24px 4px 118px;
             }
@@ -1619,6 +1629,7 @@
 
         function startGame() {
             resetGameState();
+            document.body.classList.add('game-active');
             ui.startScreen.classList.add('hidden');
             ui.gameoverOverlay.classList.add('hidden');
             ui.gameScreen.classList.remove('hidden');
