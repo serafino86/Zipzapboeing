@@ -828,6 +828,8 @@
                 min-height: calc(100dvh - 20px);
                 max-height: calc(100dvh - 20px);
                 overflow: hidden;
+                grid-template-rows: auto auto minmax(320px, 1fr) auto;
+                align-content: stretch;
             }
 
             .players-stage {
@@ -849,8 +851,8 @@
             .player-slot.player-4 { left: 23%; bottom: 20%; transform: translateX(-50%); }
 
             .stage {
-                min-height: 0;
-                height: 100%;
+                min-height: 320px;
+                height: auto;
             }
 
             .decision-card {
@@ -888,6 +890,11 @@
                 min-height: calc(100dvh - 12px);
                 max-height: calc(100dvh - 12px);
                 gap: 10px;
+                grid-template-rows: auto auto minmax(280px, 1fr) auto;
+            }
+
+            .stage {
+                min-height: 280px;
             }
 
             .overlay {
