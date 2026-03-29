@@ -394,6 +394,8 @@
             border-radius: 16px;
             background: rgba(10, 6, 16, 0.72);
             border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 3;
         }
 
         .player-badge strong {
@@ -714,15 +716,19 @@
             position: fixed;
             inset: 0;
             display: grid;
-            place-items: center;
+            align-items: start;
+            justify-items: center;
             padding: 18px;
             background: rgba(5, 4, 10, 0.62);
             backdrop-filter: blur(10px);
             z-index: 40;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .overlay-card {
             width: min(100%, 520px);
+            margin: auto 0;
             border-radius: 30px;
             padding: 22px;
             text-align: center;
@@ -861,6 +867,14 @@
                 border-radius: 24px;
             }
 
+            .overlay {
+                padding: 12px;
+            }
+
+            .overlay-card {
+                margin: 0;
+            }
+
             .player-slot {
                 width: 88px;
             }
@@ -873,6 +887,17 @@
             .player-badge {
                 min-width: 82px;
                 padding: 6px 8px;
+            }
+
+            .player-slot.player-2 .player-badge,
+            .player-slot.player-3 .player-badge {
+                order: -1;
+                margin-bottom: 6px;
+            }
+
+            .player-slot.player-2,
+            .player-slot.player-3 {
+                gap: 2px;
             }
 
             .speech-bubble {
