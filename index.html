@@ -1375,7 +1375,7 @@
             game.plannedCommand = result.command;
             game.plannedTarget = result.target;
             game.turnTimerMs = Math.max(1350, 3400 - game.round * 75);
-            game.humanStartAt = performance.now();
+            game.humanStartAt = Date.now();
 
             markPlayers(humanIndex, result.target);
             ui.decisionCard.classList.remove('hidden');
@@ -1384,9 +1384,9 @@
             updateTimer();
         }
 
-        function updateTimer(now = performance.now()) {
+        function updateTimer() {
             if (!game.awaitingHuman) return;
-            const elapsed = now - game.humanStartAt;
+            const elapsed = Date.now() - game.humanStartAt;
             const remaining = Math.max(0, game.turnTimerMs - elapsed);
             const ratio = remaining / game.turnTimerMs;
 
@@ -1404,7 +1404,7 @@
                 failTurn('Fuori Tempo', 'Hai perso il ritmo prima di scegliere la battuta giusta.');
                 return;
             }
-            game.humanFrame = requestAnimationFrame(updateTimer);
+            game.humanFrame = requestAnimationFrame(() => updateTimer());
         }
 
         function positionFor(playerIndex) {
@@ -1544,7 +1544,7 @@
             ui.decisionCard.classList.add('hidden');
             clearTutorialVisuals();
             updateHud();
-            setTimeout(scheduleNpcTurn, 180);
+            setTimeout(startOpeningTurn, 180);
         }
 
         function showTutorial() {
@@ -1605,6 +1605,35 @@
             game.direction = result.nextDirection;
             game.round += 1;
             updateHud();
+        }
+
+        function startOpeningTurn() {
+            clearTimeout(game.npcTimer);
+            cancelAnimationFrame(game.humanFrame);
+            game.awaitingHuman = false;
+            game.plannedCommand = null;
+            game.plannedTarget = null;
+            game.direction = 1;
+            game.round = 0;
+
+            const introActor = nextIndex(game.playerId, -1);
+            const introPrevious = nextIndex(introActor, -1);
+            game.activeIndex = introActor;
+            game.previousIndex = introPrevious;
+            markPlayers(introActor, game.playerId);
+
+            game.npcTimer = setTimeout(() => {
+                const result = {
+                    command: 'ZIP',
+                    target: game.playerId,
+                    nextDirection: 1
+                };
+                markPlayers(introActor, game.playerId);
+                applyMove(result, introActor);
+                game.npcTimer = setTimeout(() => {
+                    prepareHumanTurn();
+                }, 620);
+            }, 820);
         }
 
         function scheduleNpcTurn() {
@@ -1710,7 +1739,7 @@
             if (game.tutorialEnabled) {
                 showTutorial();
             } else {
-                scheduleNpcTurn();
+                startOpeningTurn();
             }
         }
 
