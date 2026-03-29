@@ -1,0 +1,5 @@
+player-you https://cdn.leonardo.ai/users/b87e8d07-d518-4da6-a737-ce3021bf6e83/generations/3e8df83c-2439-4339-8fec-0d4d77f7b916/segments/1:1:1/Lucid_Origin_Enrico_charismatic_3D_cartoon_theater_performer_h_0.jpg
+player-simone https://cdn.leonardo.ai/users/b87e8d07-d518-4da6-a737-ce3021bf6e83/generations/50e2e18f-f517-4339-8efb-3fb954023335/segments/1:1:1/Lucid_Origin_Simone_playful_3D_cartoon_theater_performer_half__0.jpg
+player-desy https://cdn.leonardo.ai/users/b87e8d07-d518-4da6-a737-ce3021bf6e83/generations/d7c7da49-7156-431e-98cc-dcf057b5c311/segments/1:1:1/Lucid_Origin_Desy_energetic_3D_cartoon_theater_performer_half__0.jpg
+player-francesca https://cdn.leonardo.ai/users/b87e8d07-d518-4da6-a737-ce3021bf6e83/generations/3680ebdc-0073-4f00-afb8-683cb7540997/segments/1:1:1/Lucid_Origin_Francesca_elegant_3D_cartoon_theater_performer_ha_0.jpg
+player-matteo https://cdn.leonardo.ai/users/b87e8d07-d518-4da6-a737-ce3021bf6e83/generations/78541436-113b-4001-8f08-20978aa9362e/segments/1:1:1/Lucid_Origin_Matteo_funny_3D_cartoon_theater_performer_half_bo_0.jpg
