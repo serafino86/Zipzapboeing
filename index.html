@@ -13,10 +13,11 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-```
     body {
         font-family: 'Courier New', monospace;
-        background: #000;
+        background:
+            linear-gradient(180deg, rgba(10, 8, 25, 0.82), rgba(7, 4, 16, 0.95)),
+            url('assets/generated/theater-bg.jpg') center/cover no-repeat fixed;
         overflow: hidden;
         touch-action: manipulation;
         position: fixed;
@@ -37,11 +38,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: 
-            linear-gradient(0deg, transparent 24%, rgba(255, 0, 255, 0.1) 25%, rgba(255, 0, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(255, 0, 255, 0.1) 75%, rgba(255, 0, 255, 0.1) 76%, transparent 77%, transparent),
-            linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.1) 25%, rgba(0, 255, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.1) 75%, rgba(0, 255, 255, 0.1) 76%, transparent 77%, transparent);
-        background-size: 50px 50px;
-        animation: gridScroll 20s linear infinite;
+        background:
+            radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 42%),
+            linear-gradient(0deg, transparent 24%, rgba(255, 0, 255, 0.07) 25%, rgba(255, 0, 255, 0.07) 26%, transparent 27%, transparent 74%, rgba(255, 0, 255, 0.07) 75%, rgba(255, 0, 255, 0.07) 76%, transparent 77%, transparent),
+            linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.07) 25%, rgba(0, 255, 255, 0.07) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.07) 75%, rgba(0, 255, 255, 0.07) 76%, transparent 77%, transparent);
+        background-size: 100% 100%, 54px 54px, 54px 54px;
+        animation: gridScroll 24s linear infinite;
+        opacity: 0.55;
     }
 
     @keyframes gridScroll {
@@ -98,11 +101,12 @@
     #header {
         flex: 0 0 auto;
         padding: 12px 15px;
-        background: rgba(0, 0, 0, 0.9);
-        border-bottom: 2px solid #0ff;
+        background: rgba(14, 8, 26, 0.82);
+        border-bottom: 1px solid rgba(255,255,255,0.12);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        backdrop-filter: blur(10px);
     }
 
     #score-display {
@@ -110,6 +114,35 @@
         font-size: 15px;
         font-weight: bold;
         text-shadow: 0 0 10px #0ff;
+    }
+
+    .header-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .header-brand {
+        color: #ffe8a6;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        text-shadow: 0 0 14px rgba(255, 214, 94, 0.45);
+    }
+
+    #mode-display {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
     }
 
     #asino-letters {
@@ -149,13 +182,15 @@
         height: 20vh;
         min-height: 120px;
         max-height: 180px;
-        background: linear-gradient(to top, #0a0020 0%, #1a0040 100%);
-        border-bottom: 3px solid #f0f;
+        background:
+            linear-gradient(180deg, rgba(35, 10, 36, 0.18), rgba(18, 5, 23, 0.86)),
+            url('assets/generated/theater-bg.jpg') center 28%/cover no-repeat;
+        border-bottom: 1px solid rgba(255,255,255,0.14);
         position: relative;
         display: flex;
         align-items: flex-end;
         padding: 10px;
-        box-shadow: inset 0 -20px 40px rgba(255, 0, 255, 0.3);
+        box-shadow: inset 0 -20px 40px rgba(255, 0, 255, 0.2);
     }
 
     #stage::after {
@@ -165,8 +200,8 @@
         left: 0;
         right: 0;
         height: 20px;
-        background: repeating-linear-gradient(90deg, #f0f 0px, #f0f 5px, #0ff 5px, #0ff 10px, #ff0 10px, #ff0 15px, #0f0 15px, #0f0 20px);
-        opacity: 0.7;
+        background: linear-gradient(90deg, #ff4fd8 0%, #17efff 45%, #ffe17f 100%);
+        opacity: 0.85;
     }
 
     #actor {
@@ -179,26 +214,15 @@
     .actor-sprite {
         width: 60px;
         height: 60px;
-        background: radial-gradient(circle at 30% 30%, #0ff 0%, #0af 50%, #08f 100%);
-        border: 3px solid #0ff;
-        border-radius: 50%;
+        background: url('assets/generated/mask-icon.png') center/contain no-repeat;
         position: relative;
         animation: actorPulse 2s infinite;
-        box-shadow: 0 0 20px #0ff;
+        filter: drop-shadow(0 0 22px rgba(0, 255, 255, 0.42));
     }
 
     @keyframes actorPulse {
         0%, 100% { transform: scale(1); }
         50% { transform: scale(1.05); }
-    }
-
-    .actor-sprite::before {
-        content: '🎭';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 32px;
     }
 
     #actor-command {
@@ -220,7 +244,9 @@
     /* CASCADE */
     #command-cascade {
         flex: 1 1 auto;
-        background: radial-gradient(ellipse at center, rgba(10, 0, 50, 0.8) 0%, #000 100%);
+        background:
+            linear-gradient(180deg, rgba(20, 5, 30, 0.2), rgba(6, 4, 15, 0.9)),
+            radial-gradient(ellipse at center, rgba(120, 30, 90, 0.18) 0%, rgba(0,0,0,0.92) 72%);
         position: relative;
         overflow: hidden;
     }
@@ -232,15 +258,16 @@
         transform: translateX(-50%);
         width: 140px;
         height: 70px;
-        border: 3px solid #0f0;
-        border-radius: 10px;
-        box-shadow: 0 0 20px #0f0, inset 0 0 20px rgba(0, 255, 0, 0.2);
+        border: 3px solid #8dff66;
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(144,255,88,0.08), rgba(144,255,88,0.14));
+        box-shadow: 0 0 24px rgba(141,255,102,0.8), inset 0 0 24px rgba(141,255,102,0.16);
         animation: hitZonePulse 1.5s infinite;
     }
 
     @keyframes hitZonePulse {
-        0%, 100% { box-shadow: 0 0 20px #0f0, inset 0 0 20px rgba(0, 255, 0, 0.2); }
-        50% { box-shadow: 0 0 30px #0f0, inset 0 0 30px rgba(0, 255, 0, 0.4); }
+        0%, 100% { box-shadow: 0 0 20px rgba(141,255,102,0.7), inset 0 0 20px rgba(141,255,102,0.2); }
+        50% { box-shadow: 0 0 34px rgba(141,255,102,0.95), inset 0 0 28px rgba(141,255,102,0.36); }
     }
 
     .falling-command {
@@ -306,8 +333,9 @@
     #controls {
         flex: 0 0 auto;
         padding: 12px 10px;
-        background: rgba(0, 0, 0, 0.95);
-        border-top: 2px solid #0ff;
+        background: rgba(10, 9, 20, 0.92);
+        border-top: 1px solid rgba(255,255,255,0.12);
+        backdrop-filter: blur(10px);
     }
 
     #main-buttons {
@@ -319,23 +347,36 @@
 
     .game-button {
         flex: 1;
-        max-width: 110px;
-        padding: 16px 8px;
-        font-size: 18px;
+        max-width: 118px;
+        padding: 12px 8px 14px;
+        font-size: 16px;
         font-weight: bold;
         font-family: 'Courier New', monospace;
-        border: 3px solid;
-        background: rgba(0, 0, 0, 0.8);
+        border: 2px solid;
+        background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.32));
+        border-radius: 20px;
         cursor: pointer;
         text-transform: uppercase;
         position: relative;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        backdrop-filter: blur(8px);
+    }
+
+    .game-button img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        pointer-events: none;
     }
 
     #btn-zip {
         color: #f0f;
         border-color: #f0f;
-        box-shadow: 0 0 15px #f0f;
+        box-shadow: 0 10px 28px rgba(255, 0, 255, 0.2);
         text-shadow: 0 0 10px #f0f;
     }
 
@@ -347,7 +388,7 @@
     #btn-zapp {
         color: #0ff;
         border-color: #0ff;
-        box-shadow: 0 0 15px #0ff;
+        box-shadow: 0 10px 28px rgba(0, 255, 255, 0.2);
         text-shadow: 0 0 10px #0ff;
     }
 
@@ -359,7 +400,7 @@
     #btn-boing {
         color: #0f0;
         border-color: #0f0;
-        box-shadow: 0 0 15px #0f0;
+        box-shadow: 0 10px 28px rgba(0, 255, 0, 0.2);
         text-shadow: 0 0 10px #0f0;
     }
 
@@ -375,7 +416,9 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.97);
+        background:
+            linear-gradient(180deg, rgba(14, 9, 22, 0.72), rgba(7, 4, 15, 0.94)),
+            url('assets/generated/theater-bg.jpg') center/cover no-repeat;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -384,17 +427,23 @@
         padding: 8vh 4vw 8vh 4vw;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        border-top: 3px solid #0ff;
-        box-shadow: inset 0 3px 20px rgba(0, 255, 255, 0.5);
+        border-top: 1px solid rgba(255,255,255,0.18);
+        box-shadow: inset 0 3px 20px rgba(0, 255, 255, 0.18);
     }
 
     .overlay-content {
         width: 100%;
-        max-width: 500px;
+        max-width: 560px;
         display: flex;
         flex-direction: column;
         align-items: center;
         min-height: min-content;
+        padding: 18px 18px 28px;
+        border-radius: 28px;
+        background: linear-gradient(180deg, rgba(18, 12, 32, 0.82), rgba(10, 8, 22, 0.72));
+        border: 1px solid rgba(255,255,255,0.12);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 24px 60px rgba(0,0,0,0.34);
     }
 
     @keyframes borderFlow {
@@ -453,6 +502,13 @@
         cursor: pointer;
     }
 
+    .hero-mark {
+        width: clamp(86px, 24vw, 130px);
+        height: clamp(86px, 24vw, 130px);
+        object-fit: contain;
+        filter: drop-shadow(0 14px 24px rgba(0, 255, 255, 0.22));
+    }
+
     .subtitle-neon {
         font-size: clamp(16px, 4.5vw, 24px);
         color: #f0f;
@@ -492,10 +548,13 @@
     }
 
     .donkey-icon {
-        font-size: clamp(50px, 13vw, 70px);
+        width: clamp(86px, 24vw, 120px);
+        height: clamp(86px, 24vw, 120px);
         margin: 2vh 0;
         cursor: pointer;
         animation: donkeyBounce 2s ease-in-out infinite;
+        background: url('assets/generated/donkey-icon.png') center/contain no-repeat;
+        filter: drop-shadow(0 18px 28px rgba(255, 74, 168, 0.18));
     }
 
     @keyframes donkeyBounce {
@@ -530,6 +589,52 @@
     .start-btn-mega:active {
         background: #0f0;
         color: #000;
+    }
+
+    .mode-selector {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        width: 100%;
+        margin: 2vh 0 1vh;
+    }
+
+    .mode-chip {
+        border: 1px solid rgba(255,255,255,0.14);
+        background: rgba(255,255,255,0.04);
+        border-radius: 18px;
+        padding: 12px 10px;
+        color: #d8dff6;
+        cursor: pointer;
+        text-align: left;
+        min-height: 92px;
+    }
+
+    .mode-chip strong {
+        display: block;
+        color: #fff;
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .mode-chip span {
+        display: block;
+        font-size: 11px;
+        line-height: 1.4;
+        color: #b3bdd7;
+    }
+
+    .mode-chip.active {
+        border-color: rgba(255,255,255,0.3);
+        background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+        box-shadow: 0 18px 32px rgba(0,0,0,0.22);
+    }
+
+    #mode-summary {
+        color: #ffeaa5;
+        font-size: clamp(13px, 3.6vw, 15px);
+        text-align: center;
+        margin-bottom: 1vh;
     }
 
     .link-row {
@@ -575,20 +680,21 @@
         margin-bottom: 1.5vh;
     }
 </style>
-```
-
 </head>
 <body>
     <div id="bg-grid"></div>
     <div id="stars"></div>
     <div id="scanline"></div>
 
-```
 <div id="game-container">
     <div id="header">
         <div id="score-display">
             <div>⭐ <span id="score">0</span></div>
             <div style="font-size: 11px;">🏆 <span id="highscore">0</span></div>
+        </div>
+        <div class="header-center">
+            <div class="header-brand">Pont d'Art Arcade</div>
+            <div id="mode-display">MODE · CLASSIC</div>
         </div>
         <div id="asino-letters">
             <div class="asino-letter">A</div>
@@ -612,16 +718,16 @@
 
     <div id="controls">
         <div id="main-buttons">
-            <button class="game-button" id="btn-zip">ZIP</button>
-            <button class="game-button" id="btn-zapp">ZAPP</button>
-            <button class="game-button" id="btn-boing">BOING</button>
+            <button class="game-button" id="btn-zip"><img src="assets/generated/zip-icon.png" alt="ZIP"><span>ZIP</span></button>
+            <button class="game-button" id="btn-zapp"><img src="assets/generated/zapp-icon.png" alt="ZAPP"><span>ZAPP</span></button>
+            <button class="game-button" id="btn-boing"><img src="assets/generated/boing-icon.png" alt="BOING"><span>BOING</span></button>
         </div>
     </div>
 
     <!-- IDLE -->
     <div id="idle-overlay" class="overlay">
         <div class="overlay-content">
-            <div style="font-size: clamp(45px, 11vw, 60px); margin-bottom: 1vh;" onclick="window.open('https://www.associazionepontdart.com/', '_blank')">🎭</div>
+            <img class="hero-mark" src="assets/generated/mask-icon.png" alt="Pont d'Art icon" onclick="window.open('https://www.associazionepontdart.com/', '_blank')">
             <div class="game-logo" onclick="window.open('https://www.associazionepontdart.com/', '_blank')">ZIP ZAPP<br>BOING</div>
             <div class="subtitle-neon">⚡ ASINO EDITION ⚡</div>
 
@@ -632,7 +738,24 @@
                 <p style="color: #888; font-size: 11px; margin-top: 1vh;">👆 TAP PER VISITARE</p>
             </div>
 
-            <div class="donkey-icon" onclick="easterEggTap()">🐴</div>
+            <div class="mode-selector">
+                <button class="mode-chip active" data-mode="classic" onclick="selectMode('classic')">
+                    <strong>Classic</strong>
+                    <span>Bilanciata, 5 errori, progressione arcade standard.</span>
+                </button>
+                <button class="mode-chip" data-mode="turbo" onclick="selectMode('turbo')">
+                    <strong>Turbo</strong>
+                    <span>Più veloce, più pressione, partita aggressiva.</span>
+                </button>
+                <button class="mode-chip" data-mode="relax" onclick="selectMode('relax')">
+                    <strong>Relax</strong>
+                    <span>Più lenta, più margine, ideale per imparare.</span>
+                </button>
+            </div>
+
+            <p id="mode-summary">Classic: riflessi puliti, hit zone severa e ritmo crescente.</p>
+
+            <div class="donkey-icon" onclick="easterEggTap()"></div>
 
             <button class="start-btn-mega" onclick="startGame()">START</button>
 
@@ -803,12 +926,40 @@
 
     // CONFIG
     const CONFIG = {
-        initialSpeed: 1600,      // Era 2200 → Ora molto più veloce!
-        minSpeed: 500,           // Era 700 → Limite ancora più veloce!
-        speedDecrease: 80,       // Era 60 → Aumenta velocità più rapidamente!
-        specialChance: 0.25,     // Era 0.20 → Più parole speciali = più sfida!
         easterEggTaps: 10
     };
+
+    const MODES = {
+        classic: {
+            label: 'CLASSIC',
+            summary: 'Classic: riflessi puliti, hit zone severa e ritmo crescente.',
+            initialSpeed: 1600,
+            minSpeed: 520,
+            speedDecrease: 80,
+            specialChance: 0.25,
+            maxErrors: 5
+        },
+        turbo: {
+            label: 'TURBO',
+            summary: 'Turbo: più rapido, più speciale, pensato per run corte e nervose.',
+            initialSpeed: 1250,
+            minSpeed: 420,
+            speedDecrease: 95,
+            specialChance: 0.32,
+            maxErrors: 4
+        },
+        relax: {
+            label: 'RELAX',
+            summary: 'Relax: più morbida, più leggibile, perfetta per entrare nel ritmo.',
+            initialSpeed: 1950,
+            minSpeed: 760,
+            speedDecrease: 55,
+            specialChance: 0.18,
+            maxErrors: 7
+        }
+    };
+
+    let selectedMode = 'classic';
 
     // EASTER EGG
     let donkeyTaps = 0;
@@ -840,8 +991,10 @@
         state: 'IDLE',
         score: 0,
         errors: 0,
-        highscore: localStorage.getItem('zzb_hs') || 0,
-        currentSpeed: CONFIG.initialSpeed,
+        highscore: 0,
+        currentSpeed: MODES[selectedMode].initialSpeed,
+        mode: selectedMode,
+        maxErrors: MODES[selectedMode].maxErrors,
         gameLoop: null,
         fallingCommands: []
     };
@@ -865,10 +1018,40 @@
         idleOverlay: document.getElementById('idle-overlay'),
         gameoverOverlay: document.getElementById('gameover-overlay'),
         finalScore: document.getElementById('final-score'),
-        highscoreMessage: document.getElementById('highscore-message')
+        highscoreMessage: document.getElementById('highscore-message'),
+        modeDisplay: document.getElementById('mode-display'),
+        modeSummary: document.getElementById('mode-summary'),
+        modeChips: document.querySelectorAll('.mode-chip')
     };
 
-    elements.highscoreDisplay.textContent = gameState.highscore;
+    function getHighscoreKey(mode) {
+        return `zzb_hs_${mode}`;
+    }
+
+    function loadHighscore(mode) {
+        return Number(localStorage.getItem(getHighscoreKey(mode)) || 0);
+    }
+
+    function saveHighscore(mode, value) {
+        localStorage.setItem(getHighscoreKey(mode), String(value));
+    }
+
+    function selectMode(mode) {
+        selectedMode = mode;
+        const config = MODES[mode];
+        gameState.mode = mode;
+        gameState.highscore = loadHighscore(mode);
+        gameState.currentSpeed = config.initialSpeed;
+        gameState.maxErrors = config.maxErrors;
+        elements.highscoreDisplay.textContent = gameState.highscore;
+        elements.modeDisplay.textContent = `MODE · ${config.label}`;
+        elements.modeSummary.textContent = config.summary;
+        elements.modeChips.forEach((chip) => {
+            chip.classList.toggle('active', chip.dataset.mode === mode);
+        });
+    }
+
+    selectMode(selectedMode);
 
     // PULSANTI ULTRA REATTIVI
     function setupButton(btn, handler) {
@@ -888,14 +1071,20 @@
 
     // START GAME
     function startGame() {
+        const modeConfig = MODES[selectedMode];
         gameState.state = 'PLAYING';
+        gameState.mode = selectedMode;
         gameState.score = 0;
         gameState.errors = 0;
-        gameState.currentSpeed = CONFIG.initialSpeed;
+        gameState.currentSpeed = modeConfig.initialSpeed;
+        gameState.maxErrors = modeConfig.maxErrors;
+        gameState.highscore = loadHighscore(selectedMode);
         gameState.fallingCommands = [];
 
         elements.idleOverlay.style.display = 'none';
         elements.scoreDisplay.textContent = '0';
+        elements.highscoreDisplay.textContent = gameState.highscore;
+        elements.modeDisplay.textContent = `MODE · ${modeConfig.label}`;
         elements.asinoLetters.forEach(letter => letter.classList.remove('active'));
         elements.cascade.innerHTML = '<div id="hit-zone"></div>';
 
@@ -910,7 +1099,7 @@
     }
 
     function generateCommand() {
-        const isSpecial = Math.random() < CONFIG.specialChance;
+        const isSpecial = Math.random() < MODES[gameState.mode].specialChance;
         let command;
 
         if (isSpecial) {
@@ -1113,10 +1302,10 @@
 
     function addError() {
         gameState.errors++;
-        if (gameState.errors <= 5) {
-            elements.asinoLetters[gameState.errors - 1].classList.add('active');
+        if (gameState.errors <= elements.asinoLetters.length) {
+            elements.asinoLetters[Math.min(gameState.errors - 1, elements.asinoLetters.length - 1)].classList.add('active');
         }
-        if (gameState.errors >= 5) {
+        if (gameState.errors >= gameState.maxErrors) {
             endGame();
         }
     }
@@ -1124,8 +1313,9 @@
     function updateDifficulty() {
         // Aumenta difficoltà ogni 5 punti invece di 10!
         if (gameState.score % 5 === 0 && gameState.score > 0) {
-            if (gameState.currentSpeed > CONFIG.minSpeed) {
-                gameState.currentSpeed = Math.max(CONFIG.minSpeed, gameState.currentSpeed - CONFIG.speedDecrease);
+            const modeConfig = MODES[gameState.mode];
+            if (gameState.currentSpeed > modeConfig.minSpeed) {
+                gameState.currentSpeed = Math.max(modeConfig.minSpeed, gameState.currentSpeed - modeConfig.speedDecrease);
                 console.log('🔥 Speed UP! Ora:', gameState.currentSpeed + 'ms');
             }
         }
@@ -1138,11 +1328,11 @@
 
         if (gameState.score > gameState.highscore) {
             gameState.highscore = gameState.score;
-            localStorage.setItem('zzb_hs', gameState.highscore);
+            saveHighscore(gameState.mode, gameState.highscore);
             elements.highscoreDisplay.textContent = gameState.highscore;
             elements.highscoreMessage.textContent = '🏆 NUOVO RECORD!';
         } else {
-            elements.highscoreMessage.textContent = 'HI-SCORE: ' + gameState.highscore;
+            elements.highscoreMessage.textContent = `${MODES[gameState.mode].label} HI-SCORE: ` + gameState.highscore;
         }
 
         elements.finalScore.textContent = gameState.score;
@@ -1165,7 +1355,5 @@
         window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 </script>
-```
-
 </body>
 </html>
