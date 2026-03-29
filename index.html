@@ -834,9 +834,9 @@
                 min-height: calc(100dvh - 20px);
                 max-height: calc(100dvh - 20px);
                 overflow: hidden;
-                grid-template-rows: auto auto minmax(320px, 1fr);
+                grid-template-rows: auto auto minmax(380px, 1fr);
                 align-content: stretch;
-                padding-bottom: calc(190px + env(safe-area-inset-bottom, 0px));
+                padding-bottom: calc(156px + env(safe-area-inset-bottom, 0px));
             }
 
             .players-stage {
@@ -859,7 +859,7 @@
             .player-slot.player-4 { left: 23%; bottom: 20%; transform: translateX(-50%); }
 
             .stage {
-                min-height: 320px;
+                min-height: 380px;
                 height: auto;
             }
 
@@ -869,9 +869,38 @@
                 right: 16px;
                 bottom: calc(16px + env(safe-area-inset-bottom, 0px));
                 z-index: 12;
-                padding-bottom: 16px;
+                gap: 8px;
+                padding: 12px 12px 14px;
                 background: rgba(18, 10, 28, 0.94);
                 box-shadow: 0 -12px 28px rgba(0,0,0,0.24);
+            }
+
+            .decision-card h2 {
+                font-size: 1rem;
+            }
+
+            .decision-card p {
+                font-size: 0.92rem;
+                line-height: 1.35;
+            }
+
+            .target-pill {
+                padding: 8px 10px;
+                font-size: 0.86rem;
+            }
+
+            .timer-track {
+                height: 12px;
+            }
+
+            .timer-text {
+                font-size: 0.8rem;
+            }
+
+            .action-btn {
+                min-height: 54px;
+                font-size: 0.94rem;
+                border-radius: 16px;
             }
 
             .stage-preview {
@@ -900,19 +929,20 @@
                 min-height: calc(100dvh - 12px);
                 max-height: calc(100dvh - 12px);
                 gap: 10px;
-                grid-template-rows: auto auto minmax(280px, 1fr);
-                padding-bottom: calc(176px + env(safe-area-inset-bottom, 0px));
+                grid-template-rows: auto auto minmax(340px, 1fr);
+                padding-bottom: calc(148px + env(safe-area-inset-bottom, 0px));
             }
 
             .stage {
-                min-height: 280px;
+                min-height: 340px;
             }
 
             .decision-card {
                 left: 12px;
                 right: 12px;
                 bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-                padding: 14px;
+                gap: 7px;
+                padding: 11px 11px 12px;
             }
 
             .overlay {
